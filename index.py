@@ -1,4 +1,5 @@
 from PyQt5 import uic,QtWidgets
+import imagens
 
 def login():
     login = Telalogin .lineEdit_usuario.text()
