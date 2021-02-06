@@ -142,7 +142,7 @@ else:
         painel_vendas.show()
 
 
-    # janela de cadastro 
+    # janela de cadastro de novos usuarios
     def cadastro():
         Telacadastro.show()
 
@@ -192,19 +192,22 @@ else:
     painel_vendas= uic.loadUi("paginas/cpanelvendas.ui")
 
     # ********************************bottoes de click*********************************************************
+    # verifica as informaçoes e entra no sistema
     Telalogin .botao1.clicked.connect(login)
-    Telalogin .pushButton_2.clicked.connect(cadastro)
     # botao responsavel por cadastrar um novo usuario
+    Telalogin .pushButton_2.clicked.connect(cadastro)
+    
     painel_usuario.pushButton_6.clicked.connect(excluir_usuario)
-    Telacadastro.pushButton.clicked.connect(Cadastrabanco)
     painel_usuario.pushButton_7.clicked.connect(editar_usuario)
+
+    Telacadastro.pushButton.clicked.connect(Cadastrabanco)
+
     Tela_editar_usuario.pushButton.clicked.connect(update_usuarios)
     Tela_editar_usuario.pushButton_2.clicked.connect(exit_usuario_editar)
-    painel_de_controle.pushButton.clicked.connect(painel)
 
+    painel_de_controle.pushButton.clicked.connect(painel)
     painel_de_controle.pushButton_2.clicked.connect(painelprodutos)
     painel_de_controle.pushButton_3.clicked.connect(painelclientes)
-
     painel_de_controle.pushButton_4.clicked.connect(painelvendas)
     
     
