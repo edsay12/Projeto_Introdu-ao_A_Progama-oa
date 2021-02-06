@@ -39,35 +39,51 @@
      <property name="text">
       <string>id</string>
      </property>
-    </column>
-    <column>
-     <property name="text">
-      <string>Nome</string>
+     <property name="font">
+      <font>
+       <underline>true</underline>
+      </font>
+     </property>
+     <property name="background">
+      <color>
+       <red>82</red>
+       <green>216</green>
+       <blue>218</blue>
+      </color>
+     </property>
+     <property name="icon">
+      <iconset theme="red">
+       <normaloff>.</normaloff>.</iconset>
      </property>
     </column>
     <column>
      <property name="text">
-      <string>Sobrenome</string>
+      <string>Tipo</string>
      </property>
     </column>
     <column>
      <property name="text">
-      <string>E-mail</string>
+      <string>Quantidade</string>
      </property>
     </column>
     <column>
      <property name="text">
-      <string>Login</string>
+      <string>Valor</string>
      </property>
     </column>
     <column>
      <property name="text">
-      <string>Senha</string>
+      <string>Marca/Modelo</string>
      </property>
     </column>
     <column>
      <property name="text">
-      <string>Dia_Cadastro</string>
+      <string>Data_cadastro</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>Data_atualizaçao</string>
      </property>
     </column>
    </widget>
@@ -124,7 +140,7 @@ QPushButton:hover{ background-color:orange;color:black  }
 </string>
     </property>
     <property name="text">
-     <string>Novo usuario</string>
+     <string>Novo Produto</string>
     </property>
    </widget>
    <widget class="QFrame" name="frame">
@@ -158,7 +174,7 @@ QPushButton:hover{ background-color:orange;color:black  }
       <string notr="true">color:white;font-size:30px;backgound-img:none</string>
      </property>
      <property name="text">
-      <string>Usuarios Cadastrados</string>
+      <string>Produtos Cadastrados</string>
      </property>
     </widget>
    </widget>

@@ -126,13 +126,21 @@ else:
 
                 # impressao dos usuarios na tela
         painel_usuario.tableWidget.setRowCount(len(dados))
-        painel_usuario.tableWidget.setColumnCount(6)
+        painel_usuario.tableWidget.setColumnCount(7)
 
         # Adicionando dados para a visualizaçao
         for c in range(0,len(dados)):
-            for b in range(0,6):
+            for b in range(0,7):
                 # adiciona os valores na tabela
                 painel_usuario.tableWidget.setItem(c,b,QtWidgets.QTableWidgetItem(str(dados[c][b])))
+                
+    def painelclientes():
+        painel_clientes.show()
+    def painelprodutos():
+        painel_produtos.show()
+    def painelvendas():
+        painel_vendas.show()
+
 
     # janela de cadastro 
     def cadastro():
@@ -179,6 +187,9 @@ else:
     painel_de_controle = uic.loadUi("paginas/paineldecontrole.ui")
     
     Tela_editar_usuario  = uic.loadUi("paginas/editar_usuario.ui")
+    painel_clientes= uic.loadUi("paginas/cpanelclientes.ui")
+    painel_produtos= uic.loadUi("paginas/cpanelprodutos.ui")
+    painel_vendas= uic.loadUi("paginas/cpanelvendas.ui")
 
     # ********************************bottoes de click*********************************************************
     Telalogin .botao1.clicked.connect(login)
@@ -190,6 +201,12 @@ else:
     Tela_editar_usuario.pushButton.clicked.connect(update_usuarios)
     Tela_editar_usuario.pushButton_2.clicked.connect(exit_usuario_editar)
     painel_de_controle.pushButton.clicked.connect(painel)
+
+    painel_de_controle.pushButton_2.clicked.connect(painelprodutos)
+    painel_de_controle.pushButton_3.clicked.connect(painelclientes)
+
+    painel_de_controle.pushButton_4.clicked.connect(painelvendas)
+    
     
     
 
