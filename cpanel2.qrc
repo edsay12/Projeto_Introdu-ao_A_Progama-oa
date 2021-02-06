@@ -1,0 +1,7 @@
+<RCC>
+  <qresource prefix="cpanel">
+    <file>peodutos.jpg</file>
+    <file>user.jpg</file>
+    <file>usuarios.jpg</file>
+  </qresource>
+</RCC>

@@ -2,6 +2,8 @@ from PyQt5 import uic,QtWidgets
 
 # aqui eu importei a imagem da tela de login
 import imagens
+import imagemf
+import imagen2
 # importado a biblioteca responsavel pelo banco de dados
 import pymysql
 
@@ -14,7 +16,7 @@ def erroclose():
 
 try:
 # conexao com o banco de dados 
-    conexao= pymysql.connect(
+    conexao = pymysql.connect(
         host="localhost",user="root",passwd="",database="introduçaoaprogamaçao"
     )
 
@@ -35,7 +37,7 @@ except:
     print("erro no banco de dados ")
     
 else:
-
+#    telas de ediçao 
 
     def editar_usuario():
         Tela_editar_usuario.show()
@@ -49,7 +51,6 @@ else:
         # mostrar valores no formulario
         cursor.execute(f"SELECT * from usuarios WHERE id_usuarios  =  {idusuario}")
         id1 = cursor.fetchall()
-        print(id1)
         # login
         Tela_editar_usuario.lineEdit.setText(f"{id1[0][4]}")
         # senha
@@ -80,6 +81,9 @@ else:
         Tela_editar_usuario.close()
         painel()
 
+        # telas de exclusao
+
+
     def excluir_usuario():
         # retorna o numero da coluna adicionada
         row = painel_usuario.tableWidget.currentRow()
@@ -91,6 +95,8 @@ else:
         cursor.execute(f"DELETE FROM usuarios WHERE id_usuarios  =  {idusuario} ")
         conexao.commit()
         
+
+
     # pagina de login acionada por um Telalogin  =uic.loadUi("paginas/paginaLogin.ui")
     def login():
         count = 0
@@ -104,13 +110,14 @@ else:
             if senha == verifica[0][0]:
                 Telalogin .label_aviso.setText("     Login feito com sucesso")
                 Telalogin.close()
-                painel()
+                painel_de_controle.show()
             
             else:
                 Telalogin .label_aviso.setText("     Login ou senha incorretos ")
         except:
             Telalogin .label_aviso.setText("     Voce nao possui Cadastro  ")
             
+
     # funçao que abre o painel e atualiza os dados
     def painel():
         painel_usuario.show()
@@ -148,17 +155,29 @@ else:
             Telacadastro.label_7.setText("Sucesso ao cadastrar um novo usuario ")
 
 
+    def exit_usuario_editar():
+        Tela_editar_usuario.close()
+        painel_usuario.show()
+
+
+
+
         # time.sleep(3)
         # Telacadastro.close()
+
             
 
     app= QtWidgets.QApplication([])
 
     # *******************************chamada das telas********************************************************* 
     Telalogin  =uic.loadUi("paginas/paginaLogin.ui")
+
     Telacadastro =uic.loadUi("paginas/cadastro.ui")
+
     painel_usuario = uic.loadUi("paginas/cpanel.ui")
 
+    painel_de_controle = uic.loadUi("paginas/paineldecontrole.ui")
+    
     Tela_editar_usuario  = uic.loadUi("paginas/editar_usuario.ui")
 
     # ********************************bottoes de click*********************************************************
@@ -169,6 +188,10 @@ else:
     Telacadastro.pushButton.clicked.connect(Cadastrabanco)
     painel_usuario.pushButton_7.clicked.connect(editar_usuario)
     Tela_editar_usuario.pushButton.clicked.connect(update_usuarios)
+    Tela_editar_usuario.pushButton_2.clicked.connect(exit_usuario_editar)
+    painel_de_controle.pushButton.clicked.connect(painel)
+    
+    
 
 
 
