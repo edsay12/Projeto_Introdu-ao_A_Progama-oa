@@ -58,6 +58,11 @@
     </column>
     <column>
      <property name="text">
+      <string>Nome</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
       <string>Tipo</string>
      </property>
     </column>
@@ -78,12 +83,7 @@
     </column>
     <column>
      <property name="text">
-      <string>Data_cadastro</string>
-     </property>
-    </column>
-    <column>
-     <property name="text">
-      <string>Data_atualizaçao</string>
+      <string>DataDeAdiçao</string>
      </property>
     </column>
    </widget>

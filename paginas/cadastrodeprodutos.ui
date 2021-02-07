@@ -147,6 +147,21 @@ color:white</string>
      <property name="placeholderText">
       <string>Tipo: </string>
      </property>
+     <item>
+      <property name="text">
+       <string>Informatica</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Equipamentos</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Outros</string>
+      </property>
+     </item>
     </widget>
     <widget class="QLabel" name="label">
      <property name="geometry">
@@ -164,6 +179,22 @@ color:white</string>
       <string>Novo Produto</string>
      </property>
     </widget>
+   </widget>
+   <widget class="QLabel" name="label_2">
+    <property name="geometry">
+     <rect>
+      <x>280</x>
+      <y>30</y>
+      <width>171</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color:none;color:red</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
