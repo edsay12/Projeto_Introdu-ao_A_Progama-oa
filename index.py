@@ -37,9 +37,7 @@ except:
     print("erro no banco de dados ")
     
 else:
-#    telas de ediçao 
-    def Telacadastroprodutos1():
-        Telacadastroprodutos.show()
+    print("deu certo ")
 
     
 
@@ -188,9 +186,60 @@ else:
                 
     def painelclientes():
         painel_clientes.show()
+        painel_clientes.show()
+        cursor.execute("SELECT * FROM clientes")
+        dados = cursor.fetchall()
+                # impressao dos usuarios na tela
+        painel_clientes.tableWidget.setRowCount(len(dados))
+        painel_clientes.tableWidget.setColumnCount(7)
+        # Adicionando dados para a visualizaçao
+        for c in range(0,len(dados)):
+            for b in range(0,7):
+                # adiciona os valores na tabela
+                painel_clientes.tableWidget.setItem(c,b,QtWidgets.QTableWidgetItem(str(dados[c][b])))
+    
+    def excluir_clientes():
+        # retorna o numero da coluna adicionada
+        row = painel_clientes.tableWidget.currentRow()
+        # remove a linha adicionada
+        painel_clientes.tableWidget.removeRow(row)
+        cursor.execute("SELECT id_clientes FROM clientes")
+        id = cursor.fetchall()
+        idclientes = id[row][0]
+        try:
+            cursor.execute(f"DELETE FROM clientes WHERE id_clientes  =  '{idclientes}' ")
+            conexao.commit()
+        except:
+            print("adicionar aqui ")
+
+
+
+
+    def cadastroclientes1():
+        Telacadastroclientes.show()
+
+        
+    def cadastrarcliente():
+        nomecliente= Telacadastroclientes.lineEdit.text()
+        endereçocliente = Telacadastroclientes.lineEdit_2.text()
+        telefonecliente = Telacadastroclientes.lineEdit_3.text()
+        complemento= Telacadastroclientes.lineEdit_4.text()
+        cpfcliente = Telacadastroclientes.lineEdit_5.text()
+        try:
+            cursor.execute("INSERT INTO clientes(nome,cpf,endereço,complemento,telefone) VALUES('"+nomecliente+"','"+cpfcliente+"','"+endereçocliente+"','"+complemento+"','"+telefonecliente+"') ")
+        except:
+            
+            Telacadastroclientes.label_2.setText("ouve um problema ao adiciona cliente")
+        else:
+            Telacadastroclientes.label_2.setText("Sucesso ao adiciona cliente")
+            conexao.commit()
+
+
 
 
         
+
+
 # **********************************************************************************************************************************************************************
 
 # **********************************************************************produtos**************************************************************************************
@@ -210,12 +259,20 @@ else:
             for b in range(0,7):
                 # adiciona os valores na tabela
                 painel_produtos.tableWidget.setItem(c,b,QtWidgets.QTableWidgetItem(str(dados[c][b])))
-    def painelvendas():
-        painel_vendas.show()
 
 
-    
- 
+    def excluir_produto():
+        # retorna o numero da coluna adicionada
+        row = painel_produtos.tableWidget.currentRow()
+        # remove a linha adicionada
+        painel_produtos.tableWidget.removeRow(row)
+        cursor.execute("SELECT id_produtos FROM produtos")
+        id = cursor.fetchall()
+        idproduto = id[row][0]
+        cursor.execute(f"DELETE FROM produtos WHERE id_produtos  =  {idproduto}")
+        conexao.commit()
+
+
 
     def cadastro_produtos():
         nomeproduto = Telacadastroprodutos.lineEdit.text()
@@ -231,7 +288,13 @@ else:
         else:
              Telacadastroprodutos.label_2.setText("Adicionado Com sucesso")
              conexao.commit()
+
+    def Telacadastroprodutos1():
+        Telacadastroprodutos.show()
+
 # ****************************************************************************************************************************************************************************
+    def painelvendas():
+            painel_vendas.show()
 
         
 
@@ -253,6 +316,7 @@ else:
     painel_produtos= uic.loadUi("paginas/cpanelprodutos.ui")
     painel_vendas= uic.loadUi("paginas/cpanelvendas.ui")
     Telacadastroprodutos = uic.loadUi("paginas\cadastrodeprodutos.ui")
+    Telacadastroclientes = uic.loadUi("paginas\cadastroclientes .ui")
 
     # ********************************bottoes de click*********************************************************
     # verifica as informaçoes e entra no sistema
@@ -274,8 +338,17 @@ else:
 
     
     painel_produtos.pushButton_8.clicked.connect(Telacadastroprodutos1)
+    painel_produtos.pushButton_6.clicked.connect(excluir_produto)
 
     Telacadastroprodutos.pushButton.clicked.connect(cadastro_produtos)
+
+    painel_clientes.pushButton_8.clicked.connect(cadastroclientes1)
+    painel_clientes.pushButton_6.clicked.connect(excluir_clientes)
+
+    Telacadastroclientes.pushButton.clicked.connect(cadastrarcliente)
+    
+
+
 
 
 
