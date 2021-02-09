@@ -1,3 +1,4 @@
+from os import O_APPEND
 from PyQt5 import uic,QtWidgets
 
 # aqui eu importei a imagem da tela de login
@@ -210,7 +211,7 @@ else:
         id = cursor.fetchall()
         idclientes = id[line][0]
         try:
-            cursor.execute(f"DELETE FROM clientes WHERE id_clientes  =  '{idclientes}' ")
+            cursor.execute(f"DELETE FROM clientes WHERE id_clientes = '{idclientes}'")
             conexao.commit()
         except:
             print("adicionar aqui ")
@@ -225,7 +226,7 @@ else:
         idclientes = id[line][0]
         
         # mostrar valores no formulario
-        cursor.execute(f"SELECT * from clientes WHERE id_clientes =  {idclientes}")
+        cursor.execute(f"SELECT * from clientes WHERE id_clientes = {idclientes}")
         id1 = cursor.fetchall()
         # nome
         tela_editar_cliente.lineEdit.setText(f"{id1[0][1]}")
@@ -244,11 +245,11 @@ else:
         id = cursor.fetchall()
         idcliente = id[line][0]
 
-        Nome =  tela_editar_cliente.lineEdit.text()
-        Endereço =  tela_editar_cliente.lineEdit_2.text()
-        Cpf =  tela_editar_cliente.lineEdit_3.text()
-        Complemento =  tela_editar_cliente.lineEdit_4.text()
-        Telefone =  tela_editar_cliente.lineEdit_5.text()
+        Nome = tela_editar_cliente.lineEdit.text()
+        Endereço = tela_editar_cliente.lineEdit_2.text()
+        Cpf = tela_editar_cliente.lineEdit_3.text()
+        Complemento = tela_editar_cliente.lineEdit_4.text()
+        Telefone = tela_editar_cliente.lineEdit_5.text()
 
         # mandando os valores pro banco
         try:
@@ -261,17 +262,14 @@ else:
             tela_editar_cliente.close()
             painelclientes()
 
-
-
     def cadastroclientes1():
         Telacadastroclientes.show()
-
-        
+ 
     def cadastrarcliente():
-        nomecliente= Telacadastroclientes.lineEdit.text()
+        nomecliente = Telacadastroclientes.lineEdit.text()
         endereçocliente = Telacadastroclientes.lineEdit_2.text()
         telefonecliente = Telacadastroclientes.lineEdit_3.text()
-        complemento= Telacadastroclientes.lineEdit_4.text()
+        complemento = Telacadastroclientes.lineEdit_4.text()
         cpfcliente = Telacadastroclientes.lineEdit_5.text()
         try:
             cursor.execute("INSERT INTO clientes(nome,cpf,endereço,complemento,telefone) VALUES('"+nomecliente+"','"+cpfcliente+"','"+endereçocliente+"','"+complemento+"','"+telefonecliente+"') ")
@@ -291,10 +289,7 @@ else:
 # **********************************************************************************************************************************************************************
 
 # **********************************************************************produtos**************************************************************************************
-
-
-
-
+    
     def painelprodutos():
         painel_produtos.show()
         cursor.execute("SELECT * FROM produtos")
@@ -351,13 +346,6 @@ else:
             painelprodutos()
 
 
-        
-       
-       
-
-          
-     
-
     def excluir_produto():
         # retorna o numero da coluna adicionada
         line = painel_produtos.tableWidget.currentRow()
@@ -390,16 +378,42 @@ else:
         Telacadastroprodutos.show()
 
 # ****************************************************************************************************************************************************************************
+# *************************************************************vendas************************************************************
+
     def painelvendas():
             painel_vendas.show()
 
+    def cadastrovendas():
+        # listas vazias para adiçao dos  nomes
+        lista_produto = []
+        lista_cliente = []
+        # pega os prudutos e nomes cadastrados do banco  
+        cursor.execute("SELECT nome FROM produtos ")
+        nome_produto = cursor.fetchall()
+        cursor.execute("SELECT nome FROM clientes ")
+        nome_cliente = cursor.fetchall()
+        # *********************************************
+        # adicionando os nomes pegos no banco nas listas
+        for c in nome_produto:
+            lista_produto.append(c[0])
+        for b in nome_cliente:
+            lista_cliente.append(b[0])
+        # *************************************************   
+        # mostra os valores no combobox
+        Telacadastrovendas.comboBox.addItems(lista_produto)
+        Telacadastrovendas.comboBox_2.addItems(lista_cliente)
+        Telacadastrovendas.show()
+
+        
         
 
+        
+# ***************************************************************************************************************************
        
     app= QtWidgets.QApplication([])
 
 
-    # *******************************chamada das telas********************************************************* 
+# *******************************chamada das telas***************************************************************************
     Telalogin  =uic.loadUi("paginas/paginaLogin.ui")
 
     Telacadastro =uic.loadUi("paginas/cadastro.ui")
@@ -409,13 +423,23 @@ else:
     painel_de_controle = uic.loadUi("paginas/paineldecontrole.ui")
     
     Tela_editar_usuario  = uic.loadUi("paginas/editar_usuario.ui")
+
     painel_clientes= uic.loadUi("paginas/cpanelclientes.ui")
+
     painel_produtos= uic.loadUi("paginas/cpanelprodutos.ui")
+
     painel_vendas= uic.loadUi("paginas/cpanelvendas.ui")
+
     Telacadastroprodutos = uic.loadUi("paginas\cadastrodeprodutos.ui")
+
     Telacadastroclientes = uic.loadUi("paginas\cadastroclientes .ui")
+
     tela_editar_produto = uic.loadUi("paginas/editar_produtos.ui")
+
     tela_editar_cliente = uic.loadUi("paginas\editar_clientes.ui")
+
+    Telacadastrovendas = uic.loadUi("paginas/cadastrovendas.ui")
+
 
     # ********************************bottoes de click*********************************************************
     # verifica as informaçoes e entra no sistema
@@ -426,47 +450,40 @@ else:
     painel_usuario.pushButton_6.clicked.connect(excluir_usuario)
     painel_usuario.pushButton_7.clicked.connect(editar_usuario)
     painel_usuario.pushButton_8.clicked.connect(cadastro)
-
-    Telacadastro.pushButton.clicked.connect(Cadastrabanco)
-    
-
     Tela_editar_usuario.pushButton.clicked.connect(update_usuarios)
     Tela_editar_usuario.pushButton_2.clicked.connect(exit_usuario_editar)
 
     
-
+    Telacadastro.pushButton.clicked.connect(Cadastrabanco)
     
+
+   
     painel_produtos.pushButton_8.clicked.connect(Telacadastroprodutos1)
     painel_produtos.pushButton_6.clicked.connect(excluir_produto)
     painel_produtos.pushButton_7.clicked.connect(editar_produtos)
-
     tela_editar_produto.pushButton.clicked.connect(update_produtos)
-
-    tela_editar_cliente.pushButton.clicked.connect(update_clientes)
-
     Telacadastroprodutos.pushButton.clicked.connect(cadastro_produtos)
 
+
+    tela_editar_cliente.pushButton.clicked.connect(update_clientes)
     painel_clientes.pushButton_8.clicked.connect(cadastroclientes1)
     painel_clientes.pushButton_6.clicked.connect(excluir_clientes)
     painel_clientes.pushButton_7.clicked.connect(editar_cliente)
-
     Telacadastroclientes.pushButton.clicked.connect(cadastrarcliente)
+
     
 
+    painel_vendas.pushButton_8.clicked.connect(cadastrovendas)
 
 
-
-
-
+    # botoes do painel principal eles abrem as tela de cadastro
     painel_de_controle.pushButton.clicked.connect(painel)
     painel_de_controle.pushButton_2.clicked.connect(painelprodutos)
     painel_de_controle.pushButton_3.clicked.connect(painelclientes)
     painel_de_controle.pushButton_4.clicked.connect(painelvendas)
+    # ************************************************************
     
     
-    
-
-
 
     # *******************************mostra a tema e inicia o progama*****************************************
     Telalogin .show()
