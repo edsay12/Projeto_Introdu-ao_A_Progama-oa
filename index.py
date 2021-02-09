@@ -260,6 +260,55 @@ else:
                 # adiciona os valores na tabela
                 painel_produtos.tableWidget.setItem(c,b,QtWidgets.QTableWidgetItem(str(dados[c][b])))
 
+    def editar_produtos():
+        tela_editar_produto.show()
+        row = painel_produtos.tableWidget.currentRow()
+        cursor.execute("SELECT id_produtos FROM produtos")
+        id = cursor.fetchall()
+        idprodutos = id[row][0]
+        
+        # mostrar valores no formulario
+        cursor.execute(f"SELECT * from produtos WHERE id_produtos =  {idprodutos}")
+        id1 = cursor.fetchall()
+        # nome
+        tela_editar_produto.lineEdit.setText(f"{id1[0][1]}")
+        # quantidade
+        tela_editar_produto.lineEdit_3.setText(f"{id1[0][3]}")
+        # modelo
+        tela_editar_produto.lineEdit_4.setText(f"{id1[0][5]}")
+        # valor
+        tela_editar_produto.lineEdit_5.setText(f"{id1[0][4]}")
+
+    def update_produtos():
+        print("updatando ")
+        row = painel_produtos.tableWidget.currentRow()
+        cursor.execute("SELECT id_produtos FROM produtos")
+        id = cursor.fetchall()
+        idprodutos = id[row][0]
+        Nome =  tela_editar_produto.lineEdit.text()
+        Quantidade =  tela_editar_produto.lineEdit_3.text()
+        Modelo =  tela_editar_produto.lineEdit_4.text()
+        Tipo =tela_editar_produto.comboBox.currentText()
+        Valor =  tela_editar_produto.lineEdit_5.text()
+
+        # mandando os valores pro banco
+        try:
+            cursor.execute(f"UPDATE produtos SET nome = '{Nome}' ,quantidade = '{Quantidade}', marca = '{Modelo}',tipo = '{Tipo}' ,valor = '{Valor}' WHERE id_produtos  =  '{idprodutos}' ")
+            conexao.commit()
+        except:
+            print("erro no banco")
+        else:
+            print("sucesso")
+            tela_editar_produto.close()
+            painelprodutos()
+
+
+        
+       
+       
+
+          
+     
 
     def excluir_produto():
         # retorna o numero da coluna adicionada
@@ -317,6 +366,7 @@ else:
     painel_vendas= uic.loadUi("paginas/cpanelvendas.ui")
     Telacadastroprodutos = uic.loadUi("paginas\cadastrodeprodutos.ui")
     Telacadastroclientes = uic.loadUi("paginas\cadastroclientes .ui")
+    tela_editar_produto = uic.loadUi("paginas/editar_produtos.ui")
 
     # ********************************bottoes de click*********************************************************
     # verifica as informaçoes e entra no sistema
@@ -339,6 +389,9 @@ else:
     
     painel_produtos.pushButton_8.clicked.connect(Telacadastroprodutos1)
     painel_produtos.pushButton_6.clicked.connect(excluir_produto)
+    painel_produtos.pushButton_7.clicked.connect(editar_produtos)
+
+    tela_editar_produto.pushButton.clicked.connect(update_produtos)
 
     Telacadastroprodutos.pushButton.clicked.connect(cadastro_produtos)
 

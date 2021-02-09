@@ -155,7 +155,7 @@ QPushButton:hover{ background-color:orange;color:black  }
       </rect>
      </property>
      <property name="styleSheet">
-      <string notr="true">color:white;font-size:30px;backgound-img:none</string>
+      <string notr="true">color:white;font-size:30px</string>
      </property>
      <property name="text">
       <string>Vendas realizadas</string>
