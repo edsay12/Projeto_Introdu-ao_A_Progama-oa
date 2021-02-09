@@ -40,15 +40,6 @@ except:
 else:
     print("deu certo ")
 
-    
-
-
-    
-
-       
-
-
-
 #   ********************************************************************** Cadastro de usuario******************************************************************************************************************************
     def Cadastrabanco():
             nome = Telacadastro.lineEdit.text()
@@ -161,10 +152,12 @@ else:
 
        # pagina de login acionada por um Telalogin  =uic.loadUi("paginas/paginaLogin.ui")
     def login():
-        count = 0
+        global login1
         # captura oque foi escrito na pag inicial
         login1 = Telalogin .lineEdit_usuario.text()
         senha = Telalogin .lineEdit_2_senha.text()
+        
+       
         try:
             cursor.execute("SELECT senha FROM usuarios  WHERE logim =  '"+login1+"' ")
             # verificaçao de login 
@@ -382,7 +375,18 @@ else:
 
     def painelvendas():
             painel_vendas.show()
+            cursor.execute("SELECT * FROM vendas ")
+            dados = cursor.fetchall()
+                # impressao dos usuarios na tela
+            painel_vendas.tableWidget.setRowCount(len(dados))
+            painel_vendas.tableWidget.setColumnCount(5)
+            # Adicionando dados para a visualizaçao
+            for c in range(0,len(dados)):
+                for b in range(0,5):
+                # adiciona os valores na tabela
+                    painel_vendas.tableWidget.setItem(c,b,QtWidgets.QTableWidgetItem(str(dados[c][b])))
 
+    # tela de cadastro
     def cadastrovendas():
         # listas vazias para adiçao dos  nomes
         lista_produto = []
@@ -404,9 +408,76 @@ else:
         Telacadastrovendas.comboBox_2.addItems(lista_cliente)
         Telacadastrovendas.show()
 
-        
-        
+#   tela de cadastro
+    def update_vendas():
+        Produto_vendas = Telacadastrovendas.comboBox.currentText()
+        Cliente_vendas = Telacadastrovendas.comboBox_2.currentText()
+        Quantidade_vendas = Telacadastrovendas.lineEdit.text()
+        try:
+            cursor.execute(f"INSERT INTO vendas(nome_produto,nome_cliente,quatidade_produto,vendedor) VALUES(  '"+Produto_vendas+"','"+Cliente_vendas+"', '"+Quantidade_vendas+"', '"+login1+"')")
+            conexao.commit()
+        except:
+            print("erro no banco")
+        else:
+            print("tudo okay ")
+            
 
+# ***************************************  tela de ediçao****************************************************************
+    def vendas_editar():
+         # listas vazias para adiçao dos  nomes
+        lista_produto = []
+        lista_cliente = []
+        # pega os prudutos e nomes cadastrados do banco  
+        cursor.execute("SELECT nome FROM produtos ")
+        nome_produto = cursor.fetchall()
+        cursor.execute("SELECT nome FROM clientes ")
+        nome_cliente = cursor.fetchall()
+        # *********************************************
+        # adicionando os nomes pegos no banco nas listas
+        for c in nome_produto:
+            lista_produto.append(c[0])
+        for b in nome_cliente:
+            lista_cliente.append(b[0])
+        # *************************************************   
+        # mostra os valores no combobox
+        Telacadastrovendas2.comboBox.addItems(lista_produto)
+        Telacadastrovendas2.comboBox_2.addItems(lista_cliente)
+        Telacadastrovendas2.show()
+
+
+
+    def editar_vendas ():
+        print("updatando 34343")
+        line= painel_vendas.tableWidget.currentRow()
+        cursor.execute("SELECT id_vendas FROM vendas")
+        id = cursor.fetchall()
+        idvendas = id[line][0]
+
+        Produto_vendas = Telacadastrovendas2.comboBox.currentText()
+        Cliente_vendas = Telacadastrovendas2.comboBox_2.currentText()
+        Quantidade_vendas = Telacadastrovendas2.lineEdit.text()
+
+        # mandando os valores pro banco
+        try:
+            cursor.execute(f"UPDATE vendas SET nome_produto = '{Produto_vendas}' ,nome_cliente = '{Cliente_vendas}', quatidade_produto = '{Quantidade_vendas}',vendedor = '{login1}' WHERE id_vendas  =  '{idvendas}' ")
+            conexao.commit()
+        except:
+            print("erro no banco")
+        else:
+            print("sucesso")
+    # **************************************************************
+            
+          
+    def excluir_vendas():
+        # retorna o numero da coluna adicionada
+        line = painel_vendas.tableWidget.currentRow()
+        # remove a linha adicionada
+        painel_vendas.tableWidget.removeRow(line)
+        cursor.execute("SELECT id_vendas FROM vendas")
+        id = cursor.fetchall()
+        idvendas = id[line][0]
+        cursor.execute(f"DELETE FROM vendas WHERE id_vendas  =  {idvendas}")
+        conexao.commit()
         
 # ***************************************************************************************************************************
        
@@ -439,6 +510,8 @@ else:
     tela_editar_cliente = uic.loadUi("paginas\editar_clientes.ui")
 
     Telacadastrovendas = uic.loadUi("paginas/cadastrovendas.ui")
+    Telacadastrovendas2 = uic.loadUi("paginas/cadastrovendas2.ui")
+    
 
 
     # ********************************bottoes de click*********************************************************
@@ -457,13 +530,11 @@ else:
     Telacadastro.pushButton.clicked.connect(Cadastrabanco)
     
 
-   
     painel_produtos.pushButton_8.clicked.connect(Telacadastroprodutos1)
     painel_produtos.pushButton_6.clicked.connect(excluir_produto)
     painel_produtos.pushButton_7.clicked.connect(editar_produtos)
     tela_editar_produto.pushButton.clicked.connect(update_produtos)
     Telacadastroprodutos.pushButton.clicked.connect(cadastro_produtos)
-
 
     tela_editar_cliente.pushButton.clicked.connect(update_clientes)
     painel_clientes.pushButton_8.clicked.connect(cadastroclientes1)
@@ -472,17 +543,20 @@ else:
     Telacadastroclientes.pushButton.clicked.connect(cadastrarcliente)
 
     
-
     painel_vendas.pushButton_8.clicked.connect(cadastrovendas)
+    painel_vendas.pushButton_6.clicked.connect(excluir_vendas)
+    painel_vendas.pushButton_7.clicked.connect(vendas_editar)
 
+    Telacadastrovendas.pushButton.clicked.connect(update_vendas)
 
+    Telacadastrovendas2.pushButton.clicked.connect(editar_vendas )
+    
     # botoes do painel principal eles abrem as tela de cadastro
     painel_de_controle.pushButton.clicked.connect(painel)
     painel_de_controle.pushButton_2.clicked.connect(painelprodutos)
     painel_de_controle.pushButton_3.clicked.connect(painelclientes)
     painel_de_controle.pushButton_4.clicked.connect(painelvendas)
     # ************************************************************
-    
     
 
     # *******************************mostra a tema e inicia o progama*****************************************
