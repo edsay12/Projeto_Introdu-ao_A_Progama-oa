@@ -78,21 +78,21 @@ else:
 
     def excluir_usuario():
         # retorna o numero da coluna adicionada
-        row = painel_usuario.tableWidget.currentRow()
+        line = painel_usuario.tableWidget.currentRow()
         # remove a linha adicionada
-        painel_usuario.tableWidget.removeRow(row)
+        painel_usuario.tableWidget.removeRow(line)
         cursor.execute("SELECT id_usuarios FROM usuarios")
         id = cursor.fetchall()
-        idusuario = id[row][0]
+        idusuario = id[line][0]
         cursor.execute(f"DELETE FROM usuarios WHERE id_usuarios  =  {idusuario} ")
         conexao.commit()
         
     def update_usuarios():
         # RECEBE OS VALORES DO LINE EDIT E MANDA PRO BANCO
-        row = painel_usuario.tableWidget.currentRow()
+        line = painel_usuario.tableWidget.currentRow()
         cursor.execute("SELECT id_usuarios FROM usuarios")
         id = cursor.fetchall()
-        idusuario = id[row][0]
+        idusuario = id[line][0]
         login = Tela_editar_usuario.lineEdit.text()
         senha = Tela_editar_usuario.lineEdit_2.text()
         email = Tela_editar_usuario.lineEdit_3.text()
@@ -109,10 +109,10 @@ else:
         Tela_editar_usuario.show()
        
     # retorna numero da coluna adicionada
-        row = painel_usuario.tableWidget.currentRow()
+        line = painel_usuario.tableWidget.currentRow()
         cursor.execute("SELECT id_usuarios FROM usuarios")
         id = cursor.fetchall()
-        idusuario = id[row][0]
+        idusuario = id[line][0]
         
         # mostrar valores no formulario
         cursor.execute(f"SELECT * from usuarios WHERE id_usuarios  =  {idusuario}")
@@ -197,21 +197,69 @@ else:
             for b in range(0,7):
                 # adiciona os valores na tabela
                 painel_clientes.tableWidget.setItem(c,b,QtWidgets.QTableWidgetItem(str(dados[c][b])))
+
+
+
     
     def excluir_clientes():
         # retorna o numero da coluna adicionada
-        row = painel_clientes.tableWidget.currentRow()
+        line = painel_clientes.tableWidget.currentRow()
         # remove a linha adicionada
-        painel_clientes.tableWidget.removeRow(row)
+        painel_clientes.tableWidget.removeRow(line)
         cursor.execute("SELECT id_clientes FROM clientes")
         id = cursor.fetchall()
-        idclientes = id[row][0]
+        idclientes = id[line][0]
         try:
             cursor.execute(f"DELETE FROM clientes WHERE id_clientes  =  '{idclientes}' ")
             conexao.commit()
         except:
             print("adicionar aqui ")
 
+
+
+    def editar_cliente():
+        tela_editar_cliente.show()
+        line = painel_clientes.tableWidget.currentRow()
+        cursor.execute("SELECT id_clientes FROM clientes")
+        id = cursor.fetchall()
+        idclientes = id[line][0]
+        
+        # mostrar valores no formulario
+        cursor.execute(f"SELECT * from clientes WHERE id_clientes =  {idclientes}")
+        id1 = cursor.fetchall()
+        # nome
+        tela_editar_cliente.lineEdit.setText(f"{id1[0][1]}")
+        # cpf
+        tela_editar_cliente.lineEdit_3.setText(f"{id1[0][3]}")
+        # endereçp
+        tela_editar_cliente.lineEdit_2.setText(f"{id1[0][2]}")
+        # complemento
+        tela_editar_cliente.lineEdit_4.setText(f"{id1[0][4]}")
+        # Telefone 
+        tela_editar_cliente.lineEdit_5.setText(f"{id1[0][5]}")
+
+    def update_clientes():
+        line = painel_clientes.tableWidget.currentRow()
+        cursor.execute("SELECT id_clientes FROM clientes")
+        id = cursor.fetchall()
+        idcliente = id[line][0]
+
+        Nome =  tela_editar_cliente.lineEdit.text()
+        Endereço =  tela_editar_cliente.lineEdit_2.text()
+        Cpf =  tela_editar_cliente.lineEdit_3.text()
+        Complemento =  tela_editar_cliente.lineEdit_4.text()
+        Telefone =  tela_editar_cliente.lineEdit_5.text()
+
+        # mandando os valores pro banco
+        try:
+            cursor.execute(f"UPDATE clientes SET nome = '{Nome}' ,Endereço = '{Endereço}', cpf= '{Cpf}',complemento = '{Complemento}' ,telefone = '{Telefone}' WHERE id_clientes  =  '{idcliente}' ")
+            conexao.commit()
+        except:
+            print("erro no banco")
+        else:
+            print("sucesso")
+            tela_editar_cliente.close()
+            painelclientes()
 
 
 
@@ -262,10 +310,10 @@ else:
 
     def editar_produtos():
         tela_editar_produto.show()
-        row = painel_produtos.tableWidget.currentRow()
+        line = painel_produtos.tableWidget.currentRow()
         cursor.execute("SELECT id_produtos FROM produtos")
         id = cursor.fetchall()
-        idprodutos = id[row][0]
+        idprodutos = id[line][0]
         
         # mostrar valores no formulario
         cursor.execute(f"SELECT * from produtos WHERE id_produtos =  {idprodutos}")
@@ -281,10 +329,10 @@ else:
 
     def update_produtos():
         print("updatando ")
-        row = painel_produtos.tableWidget.currentRow()
+        line= painel_produtos.tableWidget.currentRow()
         cursor.execute("SELECT id_produtos FROM produtos")
         id = cursor.fetchall()
-        idprodutos = id[row][0]
+        idprodutos = id[line][0]
         Nome =  tela_editar_produto.lineEdit.text()
         Quantidade =  tela_editar_produto.lineEdit_3.text()
         Modelo =  tela_editar_produto.lineEdit_4.text()
@@ -312,12 +360,12 @@ else:
 
     def excluir_produto():
         # retorna o numero da coluna adicionada
-        row = painel_produtos.tableWidget.currentRow()
+        line = painel_produtos.tableWidget.currentRow()
         # remove a linha adicionada
-        painel_produtos.tableWidget.removeRow(row)
+        painel_produtos.tableWidget.removeRow(line)
         cursor.execute("SELECT id_produtos FROM produtos")
         id = cursor.fetchall()
-        idproduto = id[row][0]
+        idproduto = id[line][0]
         cursor.execute(f"DELETE FROM produtos WHERE id_produtos  =  {idproduto}")
         conexao.commit()
 
@@ -367,6 +415,7 @@ else:
     Telacadastroprodutos = uic.loadUi("paginas\cadastrodeprodutos.ui")
     Telacadastroclientes = uic.loadUi("paginas\cadastroclientes .ui")
     tela_editar_produto = uic.loadUi("paginas/editar_produtos.ui")
+    tela_editar_cliente = uic.loadUi("paginas\editar_clientes.ui")
 
     # ********************************bottoes de click*********************************************************
     # verifica as informaçoes e entra no sistema
@@ -393,10 +442,13 @@ else:
 
     tela_editar_produto.pushButton.clicked.connect(update_produtos)
 
+    tela_editar_cliente.pushButton.clicked.connect(update_clientes)
+
     Telacadastroprodutos.pushButton.clicked.connect(cadastro_produtos)
 
     painel_clientes.pushButton_8.clicked.connect(cadastroclientes1)
     painel_clientes.pushButton_6.clicked.connect(excluir_clientes)
+    painel_clientes.pushButton_7.clicked.connect(editar_cliente)
 
     Telacadastroclientes.pushButton.clicked.connect(cadastrarcliente)
     
