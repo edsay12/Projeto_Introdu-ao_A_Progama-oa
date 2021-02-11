@@ -1,4 +1,4 @@
-<h1 align="center ">Projeto introduçao a progamaçao <h1>
+<h1 align="center ">Projeto introdução a progamação <h1>
 <h1 align = "center">
 <h3>PAGINA INICIAL<H3>
   <img alt="NextLevelWeek" title="#NextLevelWeek" src="./img/inicio.png" />
