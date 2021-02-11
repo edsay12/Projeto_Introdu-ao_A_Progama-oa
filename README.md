@@ -1,4 +1,4 @@
-<h1 align="center ">Projeto introduçao a progamaçao <h1>
+<h1 align="center ">Projeto introdução a progamação <h1>
 <h1 align = "center">
 <h3>PAGINA INICIAL<H3>
   <img alt="NextLevelWeek" title="#NextLevelWeek" src="./img/inicio.png" />
@@ -8,12 +8,13 @@
 	🚧  Back End   🚀 Em construção...  🚧
 </h4>
 
-<h2>Features<h2>
+<h2 style="color:blue">Features<h2>
 
 - [x] Cadastro de usuário
-- [ ] Cadastro de cliente
-- [ ] Cadastro de produtos
-- [ ] Realizaçao de vendas
+- [x] Cadastro de cliente
+- [x] Cadastro de produtos
+- [x] Realizaçao de vendas
+- [ ] Impresão de nota fiscal
 
 <h2> Técnologias<h2>
 <ul>
