@@ -161,6 +161,23 @@ QPushButton:hover{ background-color:orange;color:black  }
       <string>Vendas realizadas</string>
      </property>
     </widget>
+    <widget class="QPushButton" name="pushButton_9">
+     <property name="geometry">
+      <rect>
+       <x>510</x>
+       <y>500</y>
+       <width>91</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color:orange;color:white;
+</string>
+     </property>
+     <property name="text">
+      <string>Salvar Nota</string>
+     </property>
+    </widget>
    </widget>
    <zorder>frame</zorder>
    <zorder>tableWidget</zorder>
@@ -182,7 +199,6 @@ QPushButton:hover{ background-color:orange;color:black  }
  </widget>
  <resources>
   <include location="../../../../AppData/Local/Programs/Python/Python38-32/Lib/site-packages/qt5_applications/Qt/bin/aquimesmo.qrc"/>
-  <include location="../imagemdefundo.qrc"/>
   <include location="cpanel.qrc"/>
  </resources>
  <connections/>

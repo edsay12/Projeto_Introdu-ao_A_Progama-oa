@@ -1,6 +1,6 @@
 from os import O_APPEND
 from PyQt5 import uic,QtWidgets
-
+from reportlab.pdfgen import canvas
 # aqui eu importei a imagem da tela de login
 import imagens
 import imagemf
@@ -8,7 +8,6 @@ import imagen2
 # importado a biblioteca responsavel pelo banco de dados
 import pymysql
 
-import time
 
 # fechando a pagina de erro
 def erroclose():
@@ -480,7 +479,75 @@ else:
         conexao.commit()
         
 # ***************************************************************************************************************************
-       
+# *********************************************************Nota Fiscal*******************************************************
+
+
+    def salvar_nota():
+        # essa parte pega o nome do cliente  e busca os dados dele no banco pra imprimir na nota
+         # retorna o numero da coluna adicionada
+        line = painel_vendas.tableWidget.currentRow()
+        cursor.execute("SELECT id_vendas FROM vendas")
+        id = cursor.fetchall()
+        idvendas = id[line][0]
+        cursor.execute(f"SELECT * FROM vendas WHERE id_vendas  =  {idvendas}")
+        produto2 = cursor.fetchall()
+
+
+        cursor.execute(f"SELECT * FROM clientes WHERE nome =  '{produto2[0][2]}' ")
+        dado_cliente = cursor.fetchall()
+        print(dado_cliente)
+        
+        try:
+            cnv = canvas.Canvas(f"notas/{dado_cliente[0][1]}.pdf")
+            cnv.drawString(100,800,"Eletronica legal")
+            cnv.drawString(100,750,"Rua rio Bahia, 261 D ")
+            cnv.drawString(100,735,"Paulista, 53413-010 ")
+            cnv.drawString(100,720,"Fone: (81)98590-9703")
+            cnv.drawString(100,705,"E-mail: edvandearaujo2@hotmail.com")
+
+
+            cnv.drawString(400,800,"Fatura")
+            cnv.drawString(400,750,"Data: 22/02/2021")
+            # gerar numero altimaticamente depois
+            cnv.drawString(400,735,"Fatura nº 1123")
+            # importar data altomatica depois
+            cnv.drawString(400,720,"Data: 22/02/2021")
+
+
+            cnv.drawString(100,680,"|Cobrança para:                                                             ")
+            cnv.drawString(100,678,"|__________________________________________________________|")
+
+            cnv.drawString(100,650,f"Nome: {dado_cliente[0][1]} ")
+            cnv.drawString(100,635,f"endereço  {dado_cliente[0][4]}  ")
+            cnv.drawString(100,620,f"cpf : {dado_cliente[0][2]} ")
+            
+            cnv.drawString(370,650,"Acima de R$ 10032342 ")
+            cnv.drawString(370,635,"desconto de  10%")
+
+
+            cnv.drawString(100,605," ___________________________________________________________")
+            cnv.drawString(100,590,"| id | Quantidade | Nome | Pre:o unitario0 | Valor Total    ")
+            cnv.drawString(100,585,"|___________________________________________________________|")
+            
+            cnv.drawString(100,570,f"{produto2[0]}")
+            
+            # subtotal
+            cnv.drawString(100,405," ___________________________________________________________")
+            cnv.drawString(100,390," Subtotal -                                                                                   R$ 120")
+            cnv.drawString(100,385,"|___________________________________________________________|")
+            cnv.save()
+        except:
+            print("erro ao salvar nota nome jae xiste")
+        else:
+            print("nota salva com sucesso")
+        
+
+
+# ****************************************************************************************************************************
+
+
+
+
     app= QtWidgets.QApplication([])
 
 
@@ -546,6 +613,7 @@ else:
     painel_vendas.pushButton_8.clicked.connect(cadastrovendas)
     painel_vendas.pushButton_6.clicked.connect(excluir_vendas)
     painel_vendas.pushButton_7.clicked.connect(vendas_editar)
+    painel_vendas.pushButton_9.clicked.connect(salvar_nota)
 
     Telacadastrovendas.pushButton.clicked.connect(update_vendas)
 
