@@ -378,10 +378,10 @@ else:
             dados = cursor.fetchall()
                 # impressao dos usuarios na tela
             painel_vendas.tableWidget.setRowCount(len(dados))
-            painel_vendas.tableWidget.setColumnCount(5)
+            painel_vendas.tableWidget.setColumnCount(6)
             # Adicionando dados para a visualizaçao
             for c in range(0,len(dados)):
-                for b in range(0,5):
+                for b in range(0,6):
                 # adiciona os valores na tabela
                     painel_vendas.tableWidget.setItem(c,b,QtWidgets.QTableWidgetItem(str(dados[c][b])))
 
@@ -412,8 +412,15 @@ else:
         Produto_vendas = Telacadastrovendas.comboBox.currentText()
         Cliente_vendas = Telacadastrovendas.comboBox_2.currentText()
         Quantidade_vendas = Telacadastrovendas.lineEdit.text()
+        cursor.execute(f"SELECT valor FROM produtos WHERE nome = '{Produto_vendas}' ")
+        valor = cursor.fetchall()
+        valor1 = str(valor[0][0])
+
+
+
+
         try:
-            cursor.execute(f"INSERT INTO vendas(nome_produto,nome_cliente,quatidade_produto,vendedor) VALUES(  '"+Produto_vendas+"','"+Cliente_vendas+"', '"+Quantidade_vendas+"', '"+login1+"')")
+            cursor.execute(f"INSERT INTO vendas(nome_produto,nome_cliente,quatidade_produto,valor,vendedor) VALUES(  '"+Produto_vendas+"','"+Cliente_vendas+"', '"+Quantidade_vendas+"', '"+valor1+"','"+login1+"')")
             conexao.commit()
         except:
             print("erro no banco")
@@ -495,7 +502,7 @@ else:
 
         cursor.execute(f"SELECT * FROM clientes WHERE nome =  '{produto2[0][2]}' ")
         dado_cliente = cursor.fetchall()
-        print(dado_cliente)
+        # print(dado_cliente)
         
         try:
             cnv = canvas.Canvas(f"notas/{dado_cliente[0][1]}.pdf")
@@ -514,27 +521,41 @@ else:
             cnv.drawString(400,720,"Data: 22/02/2021")
 
 
-            cnv.drawString(100,680,"|Cobrança para:                                                             ")
-            cnv.drawString(100,678,"|__________________________________________________________|")
+            cnv.drawString(100,680,"Cobrança para:                                                             ")
+            cnv.drawString(100,678,"__________________________________________________________")
 
             cnv.drawString(100,650,f"Nome: {dado_cliente[0][1]} ")
             cnv.drawString(100,635,f"endereço  {dado_cliente[0][4]}  ")
             cnv.drawString(100,620,f"cpf : {dado_cliente[0][2]} ")
             
-            cnv.drawString(370,650,"Acima de R$ 10032342 ")
-            cnv.drawString(370,635,"desconto de  10%")
+            cnv.drawString(370,650,"Acima de R$ 100")
+            cnv.drawString(370,635,"desconto a definir ")
 
 
             cnv.drawString(100,605," ___________________________________________________________")
-            cnv.drawString(100,590,"| id | Quantidade | Nome | Pre:o unitario0 | Valor Total    ")
-            cnv.drawString(100,585,"|___________________________________________________________|")
-            
-            cnv.drawString(100,570,f"{produto2[0]}")
+            cnv.drawString(100,590," id | Quantidade |         Nome         | Preço unitario |           Valor Total ")
+            cnv.drawString(100,585," ___________________________________________________________")
+             # VENDAS 
+            cnv.drawString(110,570,f"{produto2[0][0]}")
+            cnv.drawString(150,570,f"{produto2[0][3]}")
+            cnv.drawString(222,570,f"{produto2[0][1]}")
+            cnv.drawString(315,570,f"{produto2[0][4]}")
+
+            quantidade = float(produto2[0][3])
+            valor =  float(produto2[0][4])
+
+            cnv.drawString(400,570,f"{quantidade*valor} R$")
+
+
             
             # subtotal
             cnv.drawString(100,405," ___________________________________________________________")
-            cnv.drawString(100,390," Subtotal -                                                                                   R$ 120")
-            cnv.drawString(100,385,"|___________________________________________________________|")
+            cnv.drawString(100,390,f" Subtotal -                                                                               {quantidade*valor} R$")
+            cnv.drawString(100,385," ___________________________________________________________")
+
+           
+
+            
             cnv.save()
         except:
             print("erro ao salvar nota nome jae xiste")
