@@ -74,26 +74,37 @@ else:
         line = painel_usuario.tableWidget.currentRow()
         # remove a linha adicionada
         painel_usuario.tableWidget.removeRow(line)
-        cursor.execute("SELECT id_usuarios FROM usuarios")
-        id = cursor.fetchall()
-        idusuario = id[line][0]
-        cursor.execute(f"DELETE FROM usuarios WHERE id_usuarios  =  {idusuario} ")
-        conexao.commit()
-        
+        try:
+            cursor.execute("SELECT id_usuarios FROM usuarios")
+            id = cursor.fetchall()
+            idusuario = id[line][0]
+            cursor.execute(f"DELETE FROM usuarios WHERE id_usuarios  =  {idusuario} ")
+        except:
+            print("erro no banco")
+        else:
+            conexao.commit()
+            print("exclusao feita com exito")
+
     def update_usuarios():
         # RECEBE OS VALORES DO LINE EDIT E MANDA PRO BANCO
         line = painel_usuario.tableWidget.currentRow()
-        cursor.execute("SELECT id_usuarios FROM usuarios")
-        id = cursor.fetchall()
-        idusuario = id[line][0]
-        login = Tela_editar_usuario.lineEdit.text()
-        senha = Tela_editar_usuario.lineEdit_2.text()
-        email = Tela_editar_usuario.lineEdit_3.text()
-        nome = Tela_editar_usuario.lineEdit_4.text()
-        sobrenome = Tela_editar_usuario.lineEdit_5.text()
-        # mandando os valores pro banco
-        cursor.execute(f"UPDATE usuarios SET logim = '{login}' ,senha = '{senha}', email = '{email}',nome = '{nome}' ,sobrenome = '{sobrenome}' WHERE id_usuarios  =  '{idusuario}' ")
-        conexao.commit()
+        try:
+            cursor.execute("SELECT id_usuarios FROM usuarios")
+            id = cursor.fetchall()
+            idusuario = id[line][0]
+            login = Tela_editar_usuario.lineEdit.text()
+            senha = Tela_editar_usuario.lineEdit_2.text()
+            email = Tela_editar_usuario.lineEdit_3.text()
+            nome = Tela_editar_usuario.lineEdit_4.text()
+            sobrenome = Tela_editar_usuario.lineEdit_5.text()
+            # mandando os valores pro banco
+            cursor.execute(f"UPDATE usuarios SET logim = '{login}' ,senha = '{senha}', email = '{email}',nome = '{nome}' ,sobrenome = '{sobrenome}' WHERE id_usuarios  =  '{idusuario}' ")
+
+        except:
+            print("erro de acesso ao banco")
+        else:
+            conexao.commit()
+            print("dados salvos com sucesso ")
 
         Tela_editar_usuario.close()
         painel() 
@@ -495,17 +506,22 @@ else:
         # essa parte pega o nome do cliente  e busca os dados dele no banco pra imprimir na nota
          # retorna o numero da coluna adicionada
         line = painel_vendas.tableWidget.currentRow()
-        cursor.execute("SELECT id_vendas FROM vendas")
-        id = cursor.fetchall()
-        idvendas = id[line][0]
-        cursor.execute(f"SELECT * FROM vendas WHERE id_vendas  =  {idvendas}")
-        produto2 = cursor.fetchall()
+        try:
+            cursor.execute("SELECT id_vendas FROM vendas")
+            id = cursor.fetchall()
+            idvendas = id[line][0]
+            cursor.execute(f"SELECT * FROM vendas WHERE id_vendas  =  {idvendas}")
+            produto2 = cursor.fetchall()
 
-        # pega os dado do cliente que realizou a a compra 
-        cursor.execute(f"SELECT * FROM clientes WHERE nome =  '{produto2[0][2]}' ")
-        dado_cliente = cursor.fetchall()
-        # print(dado_cliente)
-        
+            # pega os dado do cliente que realizou a a compra 
+            cursor.execute(f"SELECT * FROM clientes WHERE nome =  '{produto2[0][2]}' ")
+            dado_cliente = cursor.fetchall()
+            # print(dado_cliente)
+        except:
+            print("erro no banco de dasdos")
+        else:
+            print("acesso oa banco com exito")
+
         try:
             cnv = canvas.Canvas(f"notas/{dado_cliente[0][1]}.pdf")
             minha_logo = ImageReader('img/max.jpg')
