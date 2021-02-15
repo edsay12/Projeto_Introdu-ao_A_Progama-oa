@@ -1,6 +1,8 @@
 from os import O_APPEND
 from PyQt5 import uic,QtWidgets
+
 from reportlab.pdfgen import canvas
+from reportlab.lib.utils import ImageReader
 # aqui eu importei a imagem da tela de login
 import imagens
 import imagemf
@@ -499,14 +501,15 @@ else:
         cursor.execute(f"SELECT * FROM vendas WHERE id_vendas  =  {idvendas}")
         produto2 = cursor.fetchall()
 
-
+        # pega os dado do cliente que realizou a a compra 
         cursor.execute(f"SELECT * FROM clientes WHERE nome =  '{produto2[0][2]}' ")
         dado_cliente = cursor.fetchall()
         # print(dado_cliente)
         
         try:
             cnv = canvas.Canvas(f"notas/{dado_cliente[0][1]}.pdf")
-            cnv.drawString(100,800,"Eletronica legal")
+            minha_logo = ImageReader('img/max.jpg')
+            cnv.drawImage(minha_logo, 100, 780,width=150,height=40)
             cnv.drawString(100,750,"Rua rio Bahia, 261 D ")
             cnv.drawString(100,735,"Paulista, 53413-010 ")
             cnv.drawString(100,720,"Fone: (81)98590-9703")
