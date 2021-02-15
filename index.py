@@ -225,6 +225,7 @@ else:
 
     def editar_cliente():
         tela_editar_cliente.show()
+        painel_clientes.close()
         line = painel_clientes.tableWidget.currentRow()
         cursor.execute("SELECT id_clientes FROM clientes")
         id = cursor.fetchall()
@@ -235,24 +236,29 @@ else:
         id1 = cursor.fetchall()
         # nome
         tela_editar_cliente.lineEdit.setText(f"{id1[0][1]}")
-        # cpf
+        # endereço
         tela_editar_cliente.lineEdit_3.setText(f"{id1[0][3]}")
-        # endereçp
+        # cpf
         tela_editar_cliente.lineEdit_2.setText(f"{id1[0][2]}")
         # complemento
         tela_editar_cliente.lineEdit_4.setText(f"{id1[0][4]}")
         # Telefone 
         tela_editar_cliente.lineEdit_5.setText(f"{id1[0][5]}")
+    
+    def voltar_editar1():
+        tela_editar_cliente.close()
+        painelclientes()
 
     def update_clientes():
+        painel_clientes.show()
         line = painel_clientes.tableWidget.currentRow()
         cursor.execute("SELECT id_clientes FROM clientes")
         id = cursor.fetchall()
         idcliente = id[line][0]
 
         Nome = tela_editar_cliente.lineEdit.text()
-        Endereço = tela_editar_cliente.lineEdit_2.text()
-        Cpf = tela_editar_cliente.lineEdit_3.text()
+        Cpf = tela_editar_cliente.lineEdit_2.text()
+        Endereço = tela_editar_cliente.lineEdit_3.text()
         Complemento = tela_editar_cliente.lineEdit_4.text()
         Telefone = tela_editar_cliente.lineEdit_5.text()
 
@@ -269,6 +275,7 @@ else:
 
     def cadastroclientes1():
         Telacadastroclientes.show()
+        painel_clientes.close()
  
     def cadastrarcliente():
         nomecliente = Telacadastroclientes.lineEdit.text()
@@ -283,6 +290,9 @@ else:
             Telacadastroclientes.label_2.setText("ouve um problema ao adiciona cliente")
         else:
             Telacadastroclientes.label_2.setText("Sucesso ao adiciona cliente")
+            Telacadastroclientes.close()
+            painelclientes()
+
             conexao.commit()
 
 
@@ -310,6 +320,7 @@ else:
 
     def editar_produtos():
         tela_editar_produto.show()
+        painel_produtos.close()
         line = painel_produtos.tableWidget.currentRow()
         cursor.execute("SELECT id_produtos FROM produtos")
         id = cursor.fetchall()
@@ -328,6 +339,7 @@ else:
         tela_editar_produto.lineEdit_5.setText(f"{id1[0][4]}")
 
     def update_produtos():
+        painel_produtos.show()
         print("updatando ")
         line= painel_produtos.tableWidget.currentRow()
         cursor.execute("SELECT id_produtos FROM produtos")
@@ -349,6 +361,10 @@ else:
             print("sucesso")
             tela_editar_produto.close()
             painelprodutos()
+
+    def voltar_editar():
+        tela_editar_produto.close()
+        painelprodutos()
 
 
     def excluir_produto():
@@ -377,14 +393,17 @@ else:
             Telacadastroprodutos.label_2.setText("Erro ao adicionar produto")
         else:
              Telacadastroprodutos.label_2.setText("Adicionado Com sucesso")
+             painelprodutos()
+
              conexao.commit()
 
     def Telacadastroprodutos1():
         Telacadastroprodutos.show()
+        painel_produtos.close()
 
 # ****************************************************************************************************************************************************************************
 # *************************************************************vendas************************************************************
-
+    
     def painelvendas():
             painel_vendas.show()
             cursor.execute("SELECT * FROM vendas ")
@@ -393,10 +412,13 @@ else:
             painel_vendas.tableWidget.setRowCount(len(dados))
             painel_vendas.tableWidget.setColumnCount(6)
             # Adicionando dados para a visualizaçao
+            
             for c in range(0,len(dados)):
                 for b in range(0,6):
                 # adiciona os valores na tabela
                     painel_vendas.tableWidget.setItem(c,b,QtWidgets.QTableWidgetItem(str(dados[c][b])))
+
+            
 
     # tela de cadastro
     def cadastrovendas():
@@ -409,6 +431,8 @@ else:
         cursor.execute("SELECT nome FROM clientes ")
         nome_cliente = cursor.fetchall()
         # *********************************************
+        print(lista_produto)
+        print(lista_cliente)
         # adicionando os nomes pegos no banco nas listas
         for c in nome_produto:
             lista_produto.append(c[0])
@@ -416,12 +440,18 @@ else:
             lista_cliente.append(b[0])
         # *************************************************   
         # mostra os valores no combobox
-        Telacadastrovendas.comboBox.addItems(lista_produto)
-        Telacadastrovendas.comboBox_2.addItems(lista_cliente)
+        Telacadastrovendas.comboBox.addItems(lista_produto[:])
+        Telacadastrovendas.comboBox_2.addItems(lista_cliente[:])
         Telacadastrovendas.show()
+        painel_vendas.close()
+       
+    def voltar_editar2():
+        Telacadastrovendas2.close()
+        painelvendas()
 
 #   tela de cadastro
     def update_vendas():
+        # limpa a lista para um novo cadastro
         Produto_vendas = Telacadastrovendas.comboBox.currentText()
         Cliente_vendas = Telacadastrovendas.comboBox_2.currentText()
         Quantidade_vendas = Telacadastrovendas.lineEdit.text()
@@ -429,15 +459,15 @@ else:
         valor = cursor.fetchall()
         valor1 = str(valor[0][0])
 
-
-
-
         try:
             cursor.execute(f"INSERT INTO vendas(nome_produto,nome_cliente,quatidade_produto,valor,vendedor) VALUES(  '"+Produto_vendas+"','"+Cliente_vendas+"', '"+Quantidade_vendas+"', '"+valor1+"','"+login1+"')")
             conexao.commit()
         except:
             print("erro no banco")
         else:
+        
+            painelvendas()
+            Telacadastrovendas.close()
             print("tudo okay ")
             
 
@@ -462,10 +492,12 @@ else:
         Telacadastrovendas2.comboBox.addItems(lista_produto)
         Telacadastrovendas2.comboBox_2.addItems(lista_cliente)
         Telacadastrovendas2.show()
+        painel_vendas.close()
 
 
 
     def editar_vendas ():
+        
         print("updatando 34343")
         line= painel_vendas.tableWidget.currentRow()
         cursor.execute("SELECT id_vendas FROM vendas")
@@ -484,6 +516,9 @@ else:
             print("erro no banco")
         else:
             print("sucesso")
+            Telacadastrovendas2.close()
+
+        painelvendas() 
     # **************************************************************
             
           
@@ -641,9 +676,12 @@ else:
     painel_produtos.pushButton_6.clicked.connect(excluir_produto)
     painel_produtos.pushButton_7.clicked.connect(editar_produtos)
     tela_editar_produto.pushButton.clicked.connect(update_produtos)
+    tela_editar_produto.pushButton_2.clicked.connect(voltar_editar)
     Telacadastroprodutos.pushButton.clicked.connect(cadastro_produtos)
 
     tela_editar_cliente.pushButton.clicked.connect(update_clientes)
+    tela_editar_cliente.pushButton_2.clicked.connect(voltar_editar1)
+
     painel_clientes.pushButton_8.clicked.connect(cadastroclientes1)
     painel_clientes.pushButton_6.clicked.connect(excluir_clientes)
     painel_clientes.pushButton_7.clicked.connect(editar_cliente)
@@ -654,9 +692,10 @@ else:
     painel_vendas.pushButton_6.clicked.connect(excluir_vendas)
     painel_vendas.pushButton_7.clicked.connect(vendas_editar)
     painel_vendas.pushButton_9.clicked.connect(salvar_nota)
-
+    # apenas pega os valores
     Telacadastrovendas.pushButton.clicked.connect(update_vendas)
-
+    # editas as vendas em si 
+    Telacadastrovendas2.pushButton_2.clicked.connect(voltar_editar2)
     Telacadastrovendas2.pushButton.clicked.connect(editar_vendas )
     
     # botoes do painel principal eles abrem as tela de cadastro
