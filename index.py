@@ -425,14 +425,15 @@ else:
         # listas vazias para adiçao dos  nomes
         lista_produto = []
         lista_cliente = []
+        Telacadastrovendas.comboBox.clear()
+        Telacadastrovendas.comboBox_2.clear()
+
         # pega os prudutos e nomes cadastrados do banco  
         cursor.execute("SELECT nome FROM produtos ")
         nome_produto = cursor.fetchall()
         cursor.execute("SELECT nome FROM clientes ")
         nome_cliente = cursor.fetchall()
         # *********************************************
-        print(lista_produto)
-        print(lista_cliente)
         # adicionando os nomes pegos no banco nas listas
         for c in nome_produto:
             lista_produto.append(c[0])
