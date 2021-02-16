@@ -2,6 +2,7 @@ from os import O_APPEND
 from PyQt5 import uic,QtWidgets
 
 from reportlab.pdfgen import canvas
+
 from reportlab.lib.utils import ImageReader
 # aqui eu importei a imagem da tela de login
 import imagens
@@ -363,6 +364,7 @@ else:
             painelprodutos()
 
     def voltar_editar():
+
         tela_editar_produto.close()
         painelprodutos()
 
@@ -393,6 +395,7 @@ else:
             Telacadastroprodutos.label_2.setText("Erro ao adicionar produto")
         else:
              Telacadastroprodutos.label_2.setText("Adicionado Com sucesso")
+             Telacadastroprodutos.close()
              painelprodutos()
 
              conexao.commit()
