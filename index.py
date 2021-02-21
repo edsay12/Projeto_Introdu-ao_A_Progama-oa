@@ -1,15 +1,26 @@
-from os import O_APPEND
 from PyQt5 import uic,QtWidgets
 
+# pdf
 from reportlab.pdfgen import canvas
 
 from reportlab.lib.utils import ImageReader
+# date time 
+
+from datetime import datetime
+
+from random import randint
+
 # aqui eu importei a imagem da tela de login
 import imagens
+
 import imagemf
+
 import imagen2
+
 # importado a biblioteca responsavel pelo banco de dados
 import pymysql
+
+now = datetime.now()
 
 
 # fechando a pagina de erro
@@ -18,20 +29,22 @@ def erroclose():
 
 
 try:
-# conexao com o banco de dados 
+    # conexao com o banco de dados 
     conexao = pymysql.connect(
         host="localhost",user="root",passwd="",database="introduçaoaprogamaçao"
     )
 
     # inicia a conecçao com o banco de dados 
     cursor = conexao.cursor()
+
 except:
 
     app= QtWidgets.QApplication([])
+
     Erro =uic.loadUi("paginas/erro.ui")
+
     Erro.show()
     Erro.label.setText("Erro de Acesso ao banco")
-    
     
     # botao de funçao
     Erro.pushButton.clicked.connect(erroclose)
@@ -41,6 +54,39 @@ except:
     
 else:
     print("deu certo ")
+
+
+
+
+
+
+
+
+# ******************************************************************************** tela de login ****************************************************************************************************************************************
+        
+
+
+       # pagina de login acionada por um Telalogin  =uic.loadUi("paginas/paginaLogin.ui")
+    def login():
+        global login1
+        # captura oque foi escrito na pag inicial
+        login1 = Telalogin .lineEdit_usuario.text()
+        senha = Telalogin .lineEdit_2_senha.text()
+    
+        try:
+            cursor.execute("SELECT senha FROM usuarios  WHERE logim =  '"+login1+"' ")
+            # verificaçao de login 
+            verifica = cursor.fetchall()
+
+            if senha == verifica[0][0]:
+                Telalogin .label_aviso.setText("     Login feito com sucesso")
+                Telalogin.close()
+                painel_de_controle.show()
+            else:
+                Telalogin .label_aviso.setText("     Login ou senha incorretos ")
+        except:
+            Telalogin .label_aviso.setText("     Voce nao possui Cadastro  ")
+# ********************************************************************************************************************************************************************
 
 #   ********************************************************************** Cadastro de usuario******************************************************************************************************************************
     def Cadastrabanco():
@@ -58,13 +104,13 @@ else:
             else:
                 Telacadastro.label_7.setText("Sucesso ao cadastrar um novo usuario ")
                 # janela de cadastro de novos usuarios
+
     def cadastro():
-        Telacadastroprodutos.label_2.setText("")
         Telacadastro.label_7.setText("")
         Telacadastro.show()
 
-# ***************************************************************************************************************************************************************************
 
+# ***************************************************************************************************************************************************************************
 
 
 # ********************************************************************Tela_Usuario************************************************************************************
@@ -75,6 +121,7 @@ else:
         line = painel_usuario.tableWidget.currentRow()
         # remove a linha adicionada
         painel_usuario.tableWidget.removeRow(line)
+
         try:
             cursor.execute("SELECT id_usuarios FROM usuarios")
             id = cursor.fetchall()
@@ -85,6 +132,7 @@ else:
         else:
             conexao.commit()
             print("exclusao feita com exito")
+
 
     def update_usuarios():
         # RECEBE OS VALORES DO LINE EDIT E MANDA PRO BANCO
@@ -136,63 +184,34 @@ else:
      
     # funçao que abre o painel e atualiza os dados
     def painel():
-            painel_usuario.show()
-            cursor.execute("SELECT * FROM usuarios")
-            dados = cursor.fetchall()
+        painel_usuario.show()
+        cursor.execute("SELECT * FROM usuarios")
+        dados = cursor.fetchall()
 
                     # impressao dos usuarios na tela
-            painel_usuario.tableWidget.setRowCount(len(dados))
-            painel_usuario.tableWidget.setColumnCount(7)
+        painel_usuario.tableWidget.setRowCount(len(dados))
+        painel_usuario.tableWidget.setColumnCount(7)
 
-            # Adicionando dados para a visualizaçao
-            for c in range(0,len(dados)):
-                for b in range(0,7):
-                    # adiciona os valores na tabela
-                    painel_usuario.tableWidget.setItem(c,b,QtWidgets.QTableWidgetItem(str(dados[c][b])))
+        # Adicionando dados para a visualizaçao
+        for c in range(0,len(dados)):
+            for b in range(0,7):
+                 # adiciona os valores na tabela
+                painel_usuario.tableWidget.setItem(c,b,QtWidgets.QTableWidgetItem(str(dados[c][b])))
 
 
 
     def exit_usuario_editar():
-                Tela_editar_usuario.close()
-                painel_usuario.show()
+        Tela_editar_usuario.close()
+        painel_usuario.show()
 
 # *********************************************************************************************************************************************************
-
-
-# ********************************************************************************tela de login****************************************************************************************************************************************
         
-
-
-       # pagina de login acionada por um Telalogin  =uic.loadUi("paginas/paginaLogin.ui")
-    def login():
-        global login1
-        # captura oque foi escrito na pag inicial
-        login1 = Telalogin .lineEdit_usuario.text()
-        senha = Telalogin .lineEdit_2_senha.text()
-        
-       
-        try:
-            cursor.execute("SELECT senha FROM usuarios  WHERE logim =  '"+login1+"' ")
-            # verificaçao de login 
-            verifica = cursor.fetchall()
-            if senha == verifica[0][0]:
-                Telalogin .label_aviso.setText("     Login feito com sucesso")
-                Telalogin.close()
-                painel_de_controle.show()
-            
-            else:
-                Telalogin .label_aviso.setText("     Login ou senha incorretos ")
-        except:
-            Telalogin .label_aviso.setText("     Voce nao possui Cadastro  ")
-# ********************************************************************************************************************************************************************
-            
 
     
 # ************************************************************************clientes**************************************************************************************
     
                 
     def painelclientes():
-        painel_clientes.show()
         painel_clientes.show()
         cursor.execute("SELECT * FROM clientes")
         dados = cursor.fetchall()
@@ -342,15 +361,15 @@ else:
     def update_produtos():
         painel_produtos.show()
         print("updatando ")
-        line= painel_produtos.tableWidget.currentRow()
+        line = painel_produtos.tableWidget.currentRow()
         cursor.execute("SELECT id_produtos FROM produtos")
         id = cursor.fetchall()
         idprodutos = id[line][0]
-        Nome =  tela_editar_produto.lineEdit.text()
-        Quantidade =  tela_editar_produto.lineEdit_3.text()
-        Modelo =  tela_editar_produto.lineEdit_4.text()
-        Tipo =tela_editar_produto.comboBox.currentText()
-        Valor =  tela_editar_produto.lineEdit_5.text()
+        Nome = tela_editar_produto.lineEdit.text()
+        Quantidade = tela_editar_produto.lineEdit_3.text()
+        Modelo = tela_editar_produto.lineEdit_4.text()
+        Tipo = tela_editar_produto.comboBox.currentText()
+        Valor = tela_editar_produto.lineEdit_5.text()
 
         # mandando os valores pro banco
         try:
@@ -368,7 +387,6 @@ else:
         tela_editar_produto.close()
         painelprodutos()
 
-
     def excluir_produto():
         # retorna o numero da coluna adicionada
         line = painel_produtos.tableWidget.currentRow()
@@ -379,8 +397,6 @@ else:
         idproduto = id[line][0]
         cursor.execute(f"DELETE FROM produtos WHERE id_produtos  =  {idproduto}")
         conexao.commit()
-
-
 
     def cadastro_produtos():
         nomeproduto = Telacadastroprodutos.lineEdit.text()
@@ -428,6 +444,7 @@ else:
         # listas vazias para adiçao dos  nomes
         lista_produto = []
         lista_cliente = []
+        
         Telacadastrovendas.comboBox.clear()
         Telacadastrovendas.comboBox_2.clear()
 
@@ -570,20 +587,25 @@ else:
             cnv.drawString(100,720,"Fone: (81)98590-9703")
             cnv.drawString(100,705,"E-mail: edvandearaujo2@hotmail.com")
 
-
+            data_atual = str(f'{now.day}/{now.month}/{now.year}')
             cnv.drawString(400,800,"Fatura")
-            cnv.drawString(400,750,"Data: 22/02/2021")
-            # gerar numero altimaticamente depois
+            cnv.drawString(400,750,f"Data: {data_atual}")
+
+            for c in range(0,4):
+                randint(0,10)
+                
+
+            # o legal seria gerar um numero aleatorio
             cnv.drawString(400,735,"Fatura nº 1123")
-            # importar data altomatica depois
-            cnv.drawString(400,720,"Data: 22/02/2021")
+            
+           
 
 
             cnv.drawString(100,680,"Cobrança para:                                                             ")
             cnv.drawString(100,678,"__________________________________________________________")
 
             cnv.drawString(100,650,f"Nome: {dado_cliente[0][1]} ")
-            cnv.drawString(100,635,f"endereço  {dado_cliente[0][4]}  ")
+            cnv.drawString(100,635,f"endereço: {dado_cliente[0][3]}  ")
             cnv.drawString(100,620,f"cpf : {dado_cliente[0][2]} ")
             
             cnv.drawString(370,650,"Acima de R$ 100")
@@ -656,6 +678,7 @@ else:
     tela_editar_cliente = uic.loadUi("paginas\editar_clientes.ui")
 
     Telacadastrovendas = uic.loadUi("paginas/cadastrovendas.ui")
+
     Telacadastrovendas2 = uic.loadUi("paginas/cadastrovendas2.ui")
     
 
@@ -671,7 +694,6 @@ else:
     painel_usuario.pushButton_8.clicked.connect(cadastro)
     Tela_editar_usuario.pushButton.clicked.connect(update_usuarios)
     Tela_editar_usuario.pushButton_2.clicked.connect(exit_usuario_editar)
-
     
     Telacadastro.pushButton.clicked.connect(Cadastrabanco)
     
@@ -682,6 +704,8 @@ else:
     tela_editar_produto.pushButton.clicked.connect(update_produtos)
     tela_editar_produto.pushButton_2.clicked.connect(voltar_editar)
     Telacadastroprodutos.pushButton.clicked.connect(cadastro_produtos)
+
+
 
     tela_editar_cliente.pushButton.clicked.connect(update_clientes)
     tela_editar_cliente.pushButton_2.clicked.connect(voltar_editar1)

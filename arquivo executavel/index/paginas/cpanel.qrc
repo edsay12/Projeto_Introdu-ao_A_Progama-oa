@@ -1,0 +1,11 @@
+<RCC>
+  <qresource prefix="newPrefix">
+    <file>Black-and-Orange-Desktop-Background.jpg</file>
+    <file>Black-and-Orange-WidescreenBackground-620x465.png</file>
+    <file>Picture-of-Black-and-Orange-620x465.png</file>
+    <file>OIP__1_-removebg-preview.png</file>
+    <file>peodutos-removebg-preview.png</file>
+    <file>user-removebg-preview.png</file>
+    <file>usuarios-removebg-preview.png</file>
+  </qresource>
+</RCC>
